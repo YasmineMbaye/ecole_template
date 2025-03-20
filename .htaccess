@@ -1,0 +1,15 @@
+# Activer la réécriture des URL
+RewriteEngine On
+
+# Si le fichier ou le dossier existe, ne rien faire
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Réécrire toutes les requêtes vers index.php avec un paramètre "page"
+RewriteRule ^(.*)$ index.php?page=$1 [L,QSA]
+
+# Si l'URL correspond à une page avec un ID
+RewriteRule ^modifier/([0-9]+)$ modifier.php?id=$1 [L,QSA]
+
+# Si l'URL correspond à une recherche avec une chaîne spécifique
+RewriteRule ^recherche/([^/]+)$ recherche.php?s=$1 [L,QSA]

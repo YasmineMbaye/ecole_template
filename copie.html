@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+<title>Preskool - Data Tables</title>
+
+<link rel="shortcut icon" href="assets/img/favicon.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="assets/plugins/feather/feather.css">
+
+<link rel="stylesheet" href="assets/plugins/icons/flags/flags.css">
+
+<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+<link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
+
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+
+<?php
+include("header.php");
+include("top_bar.php");
+include("left_sidebar.php");
+?>
+<div class="page-wrapper">
+<div class="content container-fluid">
+
+<div class="page-header">
+<div class="row">
+<div class="col">
+<h3 class="page-title">Data Tables</h3>
+
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-12">
+<div class="card">
+<div class="card-header">
+
+<div class="container mt-4">
+    <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <!-- Bouton Ajouter -->
+      <a href="adduser.php">
+      <button class="btn btn-primary btn-sm d-flex align-items-center">
+        <i class="bi bi-plus-circle me-2"></i> Ajouter un élève
+      </button>
+      </a>
+
+      <!-- Barre de recherche -->
+      
+      <div class="top-nav-search">
+                <form>
+                    <input type="text" class="form-control" placeholder="Search here">
+                    <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+      </div>
+  
+
+    <!-- Import/Export Section -->
+    <div class="d-flex align-items-center">
+      <!-- Importer un fichier -->
+      <div class="me-3">
+        <input type="file" class="form-control form-control-sm">
+      </div>
+
+      <!-- Bouton Import -->
+      <button class="btn btn-success btn-sm me-2">Import</button>
+
+      <!-- Menu déroulant -->
+      <div class="dropdown me-2">
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          xlsx
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">CSV</a></li>
+          <li><a class="dropdown-item" href="#">TXT</a></li>
+        </ul>
+      </div>
+
+      <!-- Bouton Export -->
+      <button class="btn btn-outline-primary btn-sm">Export</button>
+    </div>
+    </div>
+  </div>
+
+<div class="card-body">
+<div class="table-responsive">
+<table class="datatable table table-stripped">
+
+<?php
+
+include_once("connexion-BD.php");
+function executeSQL($sql){    
+    $execution=mysqli_query(getConnexion(), $sql);   
+    return $execution;                              
+    }
+?>
+<thead>
+<tr>
+<th>Prenom</th>
+<th>Nom</th>
+<th>Email</th>
+<th>Cni</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+  <?php
+$sql="SELECT * FROM user ";
+        $resultat=mysqli_query(getconnexion(), $sql);
+        if(mysqli_num_rows($resultat)>0){
+        
+            ?>
+            
+            <!--pour les autres ligne on a utiliser une boucle qui permet de prendre le résultat obtenu au niveau et le mettre dans un variable appelée $row et le tableau aura deux ligne clé et valeur; les valeur sera le résultat obtenu aprés la requete sql et la clé sera les idifiant qui se trouve au niveau de la base de donnée comme: nom, email, mdp-->
+                <?php
+                while($row= mysqli_fetch_assoc($resultat)){  //cette fonction prend le résultat de la requete sql et renvoi une ligne sous forme de tableau associatif et stocker le tableau dans $row  et la boucle while permet de parcourrir tout les ligne de la base de donnée car en haut on a juste mis select*from user sans préciser l'id donc on sélectionne tout les lignes et la boucle va parcourir chaque ligne et l'afficher
+                    
+            
+                ?>
+                
+            
+                <!-- le 2éme ligne se base sur la boucle précédent  -->
+                    <tr>
+                    <td><?php echo $row['prenom'];?></td>
+                    <td><?php echo $row['nom'];?></td> <!--Affiche le 1ere nom d'utilisateur (contenu dans la clé nom du tableau $row). !-->
+                    <td><?php echo $row['email'];?></td>
+                    <td><?php echo $row['cni'];?></td>
+                    <td><a  href="modifier.php?id=<?php echo $row['id'];?>" ><img class="image" src="write.png" alt=""></a></td> <!-- ce 3eme colonne est un lien qui s'affiche une image qui permet quand on clique la dessus sa nous envoi dans un fichier modifier.php et l'url aura aussi l'id de l'utisateur obtenu dans le tableau $row qui a comme clé id  nb:si on veut récupérer cette id on utilise la methode GET car les liens a par défaut leur méthode c'est GET -->
+                    
+                    <td >  <img data-id=<?php echo $row['id'];?> class="image  imagee" src="remove.png" alt=""></td>
+                  <!--  <td><a href="delete.php?id= <?php //echo $row['id'];?>" ><img class="image" src="remove.png" alt=""></a></td>  -->
+                    <td> <a href="trait_dossier.php?id=<?php echo $row['id'];?>"><img  class="image dossiers" src="dossier.png" alt=""></a></td>    
+                </tr>
+                    <?php
+            }
+        } 
+        ?>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<?php
+include("footer.php");
+?>
+</body>
+</html>
