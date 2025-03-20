@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         
-                        <a class="dropdown-item" href="deconnection.php">Logosdsdut</a>
+                        <a class="dropdown-item" href="deconnection.php">Logosdsdubdebd</a>
                     </div>
                 </li>
 
